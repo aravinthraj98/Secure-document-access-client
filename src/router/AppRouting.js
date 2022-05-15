@@ -1,11 +1,36 @@
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Router, Route, Routes } from 'react-router-dom';
+import AddEmployee from '../components/AdminHome/AddEmployee';
 import DashBoardComponent from '../components/AdminHome/DashBoardComponents';
 import MaintainEmployee from '../components/AdminHome/MaintainEmployee';
+import VerifyProcess from '../components/AdminHome/VerifyProcess';
+import ViewProcess from '../components/AdminHome/ViewProcess';
 import DocUploadComponent from '../components/DocUpload/DocUploadcomponent';
 import Logincomponent from '../components/Login/Logincomponent';
+import ViewProcessStatus from '../components/ProcessComponents/ViewProcessStatus';
+import ViewUserProcess from '../components/ProcessComponents/ViewUserProcess';
 import RegisterComponent from '../components/Register/RegisterComponent';
 
 export default function AppRouting() {
+  let initialState = {
+    loggedIn: false,
+    isAdmin: false,
+    isOwner: false,
+  };
+
+  const [isRoute, setRoute] = useState(initialState);
+  useEffect(() => {
+    console.log('ddd');
+    if (localStorage.getItem('loggedIn') != undefined) {
+      console.log(JSON.parse(localStorage.getItem('loggedIn')));
+      setRoute(JSON.parse(localStorage.getItem('loggedIn')));
+    }
+  }, []);
+
+  function setLogin(route) {
+    console.log({ route });
+    setRoute(route);
+  }
   return (
     <>
       <nav class='navbar navbar-expand-lg navbar-dark bg-info sticky-top'>
@@ -58,16 +83,40 @@ export default function AppRouting() {
           </ul>
         </div>
       </nav>
+
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Logincomponent />} />
+          <Route path='/' element={<Logincomponent setLogin={setLogin} />} />
           <Route path='/Register' element={<RegisterComponent />} />
-          <Route path='/docUpload' element={<DocUploadComponent />} />
-
-          <Route path='/dashboard' element={<DashBoardComponent />} />
-          <Route path='/manageEmployee' element={<MaintainEmployee />} />
         </Routes>
       </BrowserRouter>
+      {isRoute.loggedIn == true && (
+        <BrowserRouter>
+          <Routes>
+            <Route path='/docUpload' element={<DocUploadComponent />} />
+            <Route path='/userProcess' element={<ViewUserProcess />} />
+            <Route path='/processStatus/:id' element={<ViewProcessStatus />} />
+          </Routes>
+        </BrowserRouter>
+      )}
+
+      {isRoute.isOwner == true && (
+        <BrowserRouter>
+          <Routes>
+            <Route path='/dashboard' element={<DashBoardComponent />} />
+            <Route path='/manageEmployee' element={<MaintainEmployee />} />
+            <Route path='/addEmployee' element={<AddEmployee />} />
+          </Routes>
+        </BrowserRouter>
+      )}
+      {isRoute.isAdmin == true && (
+        <BrowserRouter>
+          <Routes>
+            <Route path='/myProcess' element={<ViewProcess />} />
+            <Route path='/verifyProcess/:id' element={<VerifyProcess />} />
+          </Routes>
+        </BrowserRouter>
+      )}
     </>
   );
 }
