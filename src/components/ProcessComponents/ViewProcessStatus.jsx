@@ -3,12 +3,17 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RouteUserProcess, RouteUserProcessStatus } from "../../services/Constants";
 
+import PDFViewer from "./PDFViewer";
+
+
 
 export default function ViewProcessStatus(){
     const { id }= useParams();
     
     
   const [processData,setProcessData] = useState([]);
+  const[pdf,setPdf] = useState(false);
+  const[status,setStatus] = useState([])
     useEffect(()=>{
         console.log(id)
               getDocument(id);
@@ -46,10 +51,19 @@ export default function ViewProcessStatus(){
        if(data.data!='No access'){
            console.log({data});
            setProcessData(data.data.src);
+           setStatus(data.data.status)
           //    setProcess(data);
        }
  
     }
+    async function viewPdf(value){
+        setPdf(true);
+     
+
+    }
+   
+      
+    
 
     return(
         <div className="container-fluid">
@@ -66,7 +80,17 @@ export default function ViewProcessStatus(){
                         </div>)}
                 </div>
                 </div> 
-             <div className="container">
+             <div className="container-fluid">
+                 <h1>Status</h1>
+                   <div className="row">
+                {status.map((value,index)=> <div className="col-md-3">
+                            <div className="row">
+                            <div className="col-md-8 bg-light">Dept:{value[0]} status</div>
+                            <PDFViewer value={value} />
+
+                           </div>
+                </div>)}
+                </div>
                
              </div>
         </div>

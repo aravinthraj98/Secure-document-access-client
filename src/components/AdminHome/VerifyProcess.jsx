@@ -9,20 +9,24 @@ export default function VerifyProcess(){
     const { id }= useParams();
     
   const [processData,setProcessData] = useState([]);
+  let openedTime = Date.now();
     useEffect(()=>{
         console.log(id)
               getDocument(id);
               
     },[]);
-    async function submit(){
+    async function submit(e){
+        console.log(e.target.value)
         let status ={
-            openedTime:"2",
-            closedTime:"4",
-            approvalDept:'NHAI',
-            approvedStatus:true,
+            openedTime,
+            closedTime:Date.now(),
+            approvalDept:'',
+            approvedStatus:e.target.value,
             description:"not applicatble",
             
         }
+        console.log({status})
+        
         let data ={
             status,
             currentPriority:1,
@@ -59,6 +63,14 @@ export default function VerifyProcess(){
 
     return(
         <div className="container-fluid">
+               <div className="container">
+                 <button className="btn btn-danger" value={false} onClick={submit}>
+                     Rejected
+                 </button>
+                      <button className="btn btn-success" value={true} onClick={submit}>
+                     Approved
+                 </button>
+             </div>
             <div className="container-fluid m-2 h-80">
                 <div className="row">
                         {processData.map((value,index)=>
@@ -72,11 +84,7 @@ export default function VerifyProcess(){
                         </div>)}
                 </div>
                 </div> 
-             <div className="container">
-                 <button className="btn btn-danger" onClick={submit}>
-                     Rejected
-                 </button>
-             </div>
+          
         </div>
     )
 

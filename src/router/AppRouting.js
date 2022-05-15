@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Router, Routes, Route } from 'react-router-dom';
 import AddEmployee from '../components/AdminHome/AddEmployee';
 import DashBoardComponent from '../components/AdminHome/DashBoardComponents';
+import DeptDetails from '../components/AdminHome/DeptDetails';
 import MaintainEmployee from '../components/AdminHome/MaintainEmployee';
 import VerifyProcess from '../components/AdminHome/VerifyProcess';
 import ViewProcess from '../components/AdminHome/ViewProcess';
@@ -27,8 +28,20 @@ export default function AppRouting() {
     }
   }, []);
 
+  function logout() {
+    setRoute(initialState);
+    localStorage.removeItem('loggedIn');
+    window.location.href = 'http://localhost:3000/';
+  }
   function setLogin(route) {
     console.log({ route });
+    if (route.isOwner) {
+      window.location.href = 'http://localhost:3000/deptDetails';
+    } else if (route.isAdmin == true) {
+      window.location.href = 'http://localhost:3000/myProcess';
+    } else if (route.loggedIn) {
+      window.location.href = 'http://localhost:3000/userProcess    ';
+    }
     setRoute(route);
   }
   return (
@@ -50,35 +63,69 @@ export default function AppRouting() {
         </button>
         <div class='collapse navbar-collapse' id='navbarNav'>
           <ul class='navbar-nav'>
-            <li class='nav-item active'>
-              <a class='nav-link' href='#'>
-                Home <span class='sr-only'>(current)</span>
-              </a>
-            </li>
+            {isRoute.loggedIn == false && (
+              <>
+                <li class='nav-item active'>
+                  <a class='nav-link' href='/'>
+                    login <span class='sr-only'>(current)</span>
+                  </a>
+                </li>
+
+                <li class='nav-item'>
+                  <a class='nav-link' href='register'>
+                    Register
+                  </a>
+                </li>
+              </>
+            )}
+            {isRoute.loggedIn && !isRoute.isAdmin && (
+              <>
+                <li class='nav-item'>
+                  <a class='nav-link ' href='docUpload'>
+                    docUpload
+                  </a>
+                </li>
+                <li class='nav-item'>
+                  <a class='nav-link ' href='userProcess'>
+                    my process
+                  </a>
+                </li>
+              </>
+            )}
+            {isRoute.loggedIn && isRoute.isAdmin && !isRoute.isOwner && (
+              <>
+                <li class='nav-item'>
+                  <a class='nav-link' href='verifyDocuments'>
+                    verifyDocuments
+                  </a>
+                </li>
+                <li class='nav-item'>
+                  <a class='nav-link ' href='myProcess'>
+                    my process
+                  </a>
+                </li>{' '}
+              </>
+            )}
+
+            {isRoute.loggedIn && isRoute.isOwner && (
+              <>
+                <li class='nav-item'>
+                  <a class='nav-link ' href='deptDetails'>
+                    see departments
+                  </a>
+                </li>
+
+                <li class='nav-item'>
+                  <a class='nav-link ' href='addEmployee'>
+                    addEmployee
+                  </a>
+                </li>
+              </>
+            )}
             <li class='nav-item'>
-              <a class='nav-link' href='register'>
-                Register
-              </a>
-            </li>
-            <li class='nav-item'>
-              <a class='nav-link' href='verifyDocuments'>
-                verifyDocuments
-              </a>
-            </li>
-            <li class='nav-item'>
-              <a class='nav-link ' href='docUpload'>
-                docUpload
-              </a>
-            </li>
-            <li class='nav-item'>
-              <a class='nav-link ' href='dashboard'>
-                dashboard
-              </a>
-            </li>
-            <li class='nav-item'>
-              <a class='nav-link ' href='manageEmployee'>
-                manageEmployee
-              </a>
+              <button className='btn btn-danger' onClick={logout}>
+                logout
+              </button>
             </li>
           </ul>
         </div>
@@ -88,35 +135,39 @@ export default function AppRouting() {
         <Routes>
           <Route path='/' element={<Logincomponent setLogin={setLogin} />} />
           <Route path='/Register' element={<RegisterComponent />} />
+
+          {isRoute.loggedIn == true && !isRoute.isAdmin && (
+            <>
+              <Route path='/docUpload' element={<DocUploadComponent />} />
+              <Route path='/userProcess' element={<ViewUserProcess />} />
+              <Route
+                path='/processStatus/:id'
+                element={<ViewProcessStatus />}
+              />
+            </>
+          )}
+
+          {isRoute.isOwner == true && (
+            <>
+              <Route path='/dashboard' element={<DashBoardComponent />} />
+              <Route path='/manageEmployee' element={<MaintainEmployee />} />
+              <Route path='/addEmployee' element={<AddEmployee />} />
+              <Route path='/deptDetails' element={<DeptDetails />} />
+            </>
+          )}
+          {isRoute.isAdmin == true && !isRoute.isOwner && (
+            <>
+              <Route path='/myProcess' element={<ViewProcess />} />
+              <Route path='/verifyProcess/:id' element={<VerifyProcess />} />
+            </>
+          )}
+
+          <Route
+            path='*'
+            element={<h1 className='m-25'> 404-page not found</h1>}
+          />
         </Routes>
       </BrowserRouter>
-      {isRoute.loggedIn == true && (
-        <BrowserRouter>
-          <Routes>
-            <Route path='/docUpload' element={<DocUploadComponent />} />
-            <Route path='/userProcess' element={<ViewUserProcess />} />
-            <Route path='/processStatus/:id' element={<ViewProcessStatus />} />
-          </Routes>
-        </BrowserRouter>
-      )}
-
-      {isRoute.isOwner == true && (
-        <BrowserRouter>
-          <Routes>
-            <Route path='/dashboard' element={<DashBoardComponent />} />
-            <Route path='/manageEmployee' element={<MaintainEmployee />} />
-            <Route path='/addEmployee' element={<AddEmployee />} />
-          </Routes>
-        </BrowserRouter>
-      )}
-      {isRoute.isAdmin == true && (
-        <BrowserRouter>
-          <Routes>
-            <Route path='/myProcess' element={<ViewProcess />} />
-            <Route path='/verifyProcess/:id' element={<VerifyProcess />} />
-          </Routes>
-        </BrowserRouter>
-      )}
     </>
   );
 }

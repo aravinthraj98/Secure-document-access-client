@@ -10,6 +10,7 @@ const RouteAdminVerifyProcess = Admin + 'verifyProcess';
 const RouteAdminUpdateProcess = Admin + 'updateProcess';
 const RouteUserProcess = User + 'myProcess';
 const RouteUserProcessStatus = User + 'viewProcessStatus';
+const RouteAdminGetDeptDetails = Admin + 'getDepartmentDetails';
 
 module.exports = {
   User,
@@ -22,5 +23,6 @@ module.exports = {
   RouteAdminVerifyProcess,
   RouteAdminUpdateProcess,
   RouteUserProcess,
-  RouteUserProcessStatus
+  RouteUserProcessStatus,
+  RouteAdminGetDeptDetails,
 };
