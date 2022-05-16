@@ -25,6 +25,7 @@ export default function RegisterComponent(){
           alert(response.data.userId);
           localStorage.setItem("token",response.data.token);
           localStorage.setItem('loggedIn',JSON.stringify({loggedIn:true,isAdmin:false,isOwner:false}))
+          localStorage.setItem('header',response.data.userId);
            setUserDetail({...initialState});
         }
         else{

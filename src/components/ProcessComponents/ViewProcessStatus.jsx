@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RouteUserProcess, RouteUserProcessStatus } from "../../services/Constants";
+import ModalComponent from "../ServicesComponent/ModalComponent";
 
 import PDFViewer from "./PDFViewer";
 
@@ -14,6 +15,7 @@ export default function ViewProcessStatus(){
   const [processData,setProcessData] = useState([]);
   const[pdf,setPdf] = useState(false);
   const[status,setStatus] = useState([])
+  const [modalData,setModalData] = useState(null);
     useEffect(()=>{
         console.log(id)
               getDocument(id);
@@ -67,6 +69,7 @@ export default function ViewProcessStatus(){
 
     return(
         <div className="container-fluid">
+                <ModalComponent data={modalData} />
             <div className="container-fluid m-2 h-80">
                 <div className="row">
                         {processData.map((value,index)=>
@@ -74,7 +77,7 @@ export default function ViewProcessStatus(){
                         <div className="col-md-3">
                                     <div className="row">
                             <div className="col-md-8 bg-light">{value[1]}</div>
-                           <button className="col-md-4 btn btn-info">view</button>
+                           <button className="col-md-4 btn btn-info" onClick={()=>setModalData(value[0])}>view</button>
                            </div>
 
                         </div>)}

@@ -3,26 +3,35 @@ import { PDFViewer as Pdf } from '@react-pdf/renderer'
 
 export default function PDFViewer({value}){
 return(
-   <Pdf>
+  
+
           <Document>
     <Page size="A4" style={styles.page}>
+      <View style={styles.subpage}>
+        
+    <View style={styles.titleContainer}>
+      <Text style={styles.textMargin}>Department of</Text>
+     
+    </View>
       <View style={styles.section}>
-        <Text>Approved Department</Text>
-          <Text>Opened time</Text>
-            <Text>Closed time</Text>
-              <Text>Status</Text>
+        <Text style={styles.textMargin}>Approved Department</Text>
+          <Text style={styles.textMargin}>Opened time</Text>
+            <Text style={styles.textMargin}>Closed time</Text>
+              <Text style={styles.textMargin}>Status</Text>
 
       </View>
       <View style={styles.section}>
-        <Text>{value[0]}</Text>
-        <Text>{value[1]}</Text>
-        <Text>{value[2]}</Text>
-        <Text>{value[3]}</Text>
+        <Text style={styles.textMargin}>{value[0]}</Text>
+        <Text style={styles.textMargin}>{value[1]}</Text>
+        <Text style={styles.textMargin}>{value[2]}</Text>
+        <Text style={styles.textMargin}>{value[3]}</Text>
 
+      </View>
+      
       </View>
     </Page>
   </Document>
-   </Pdf>
+
   
 )
 
@@ -31,12 +40,35 @@ return(
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
-    backgroundColor: '#E4E4E4',
+    backgroundColor: 'white',
     height: '100vh',
+    border: "1px solid black",
+    
+    
+  },
+  textMargin:{
+    margin: 10
+  },
+   subpage: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+
+    width:"100%" ,
+    border: "1px solid black",
+    margin:5
+
+    
+  },
+    titleContainer: {
+    backgroundColor: "white",
+    display: "flex",
+    flexDirection: "row",
+    padding: 5
   },
   section: {
-    margin: 10,
+    margin: 15,
     padding: 10,
-    flexGrow: 1
+    flexGrow: 1,
+    fontSize:10
   }
 });

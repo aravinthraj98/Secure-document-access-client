@@ -4,7 +4,7 @@ import { getApiData } from "../../services/ApiServices";
 import { RouteGetAllDepartment, User } from "../../services/Constants";
 
 
-export default function AddEmployee(){
+export default function AddEmployee({dept}){
   let initialState ={
 
       email:"",
@@ -14,7 +14,12 @@ export default function AddEmployee(){
   const [userDetail,setUserDetail] = useState(initialState)
   const [department,setDepartments] =useState([]);
   useEffect(()=>{
+    if(dept==null)
        loadDepartments();
+    else{
+      console.log({dept})
+      setUserDetail({...userDetail,deptName:dept});
+    }
   },[])
     function handleChange(e){
            setUserDetail({...userDetail,[e.target.name]:e.target.value});
@@ -38,10 +43,12 @@ export default function AddEmployee(){
 
    async function handleSubmit(){
     // let password = (Math.random() + 1).toString(36).substring(7)+(Math.random()+1).toString(36).substring(7);
-    let password ="qwerty"
+    let password ="qwerty";
+    let isLead =true;
+    if(dept!=null) isLead = false;
     console.log({password})
     console.log({userDetail})
-        let response = await axios.post("http://localhost:4000/admin/addEmployee",{...userDetail,password});
+        let response = await axios.post("http://localhost:4000/admin/addEmployee",{...userDetail,password,isLead});
          console.log({response});
         if(response.data.isValid==true){
           alert(response.data.userId);
@@ -68,7 +75,7 @@ return (
         className='form-control m-1'
         onChange={handleChange}
       />
-         <select className="form-control m-1" value={userDetail.deptName}  onChange={(e)=>setUserDetail({...userDetail,deptName:e.target.value})}>
+         <select className="form-control m-1" value={userDetail.deptName} hidden={dept!=null}  onChange={(e)=>setUserDetail({...userDetail,deptName:e.target.value})}>
               {department.map((value,index)=> <option  key={index+"dept"} value={value}>{value}</option>)}
       </select>
       

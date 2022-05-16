@@ -96,7 +96,11 @@ function DocUploadComponent() {
     axios.defaults.headers.common["Authorization"]= localStorage.getItem("token");
     console.log({token:localStorage.getItem("token")});
     const response = await axios.post(route,data);
-    alert(response)
+    if(response.data == true || response.data == 'true'){
+      alert("process added successfully");
+      setFiles([]);
+      
+    }
     console.log({response});
 
   }
@@ -107,7 +111,7 @@ function DocUploadComponent() {
     <>
           <ModalComponent data={modalData} />
       <div className=' container-fluid w-100'>
-        <form
+        <form id={"formDoc"}
           onSubmit={(e) => {
             e.preventDefault();
           }}
@@ -173,9 +177,9 @@ function DocUploadComponent() {
           </div>
         </div>
           <input
-            type='submit'
-            className='form-control btn btn-info  w-auto'
-            value='Add document'
+            type='reset'
+            className='form-control btn btn-success m-10  w-auto'
+            value='Add New process'
             onClick={submit}
           />
         </form>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { RouteAdminGetDeptDetails } from "../../services/Constants";
+import { RouteAdminGetDeptDetails, RouteAdminModifyPriority } from "../../services/Constants";
 
 export default function DeptDetails(){
     let initialState ={
@@ -12,6 +12,27 @@ export default function DeptDetails(){
     useEffect(()=>{
           getDepartmentDetails();
     },[])
+
+    async function modifyPriority(){
+      if(data.priority==0 || data.priority==''){
+               alert(" some error occured");
+      }
+      else{
+           axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+          let response = await axios.post(RouteAdminModifyPriority,data);
+          if(response.data==true){
+            alert("updation successfull");
+                     setData({dept:dept.dept[0],priority:dept.priority[dept.dept[0]]})
+                        getDepartmentDetails();
+          }
+          else{
+            alert("internal server error");
+         
+
+          }
+
+      }
+    }
 
    async function getDepartmentDetails(){
         
@@ -53,7 +74,7 @@ export default function DeptDetails(){
        </td>
        <td>
            <input type="number" onChange={(e)=>setData({...data,priority:e.target.value})} value={data.priority} />
-           <button onClick={()=>alert("saved")}>save</button>
+           <button onClick={modifyPriority}>save</button>
        </td>
        
       </tr>

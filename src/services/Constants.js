@@ -11,6 +11,8 @@ const RouteAdminUpdateProcess = Admin + 'updateProcess';
 const RouteUserProcess = User + 'myProcess';
 const RouteUserProcessStatus = User + 'viewProcessStatus';
 const RouteAdminGetDeptDetails = Admin + 'getDepartmentDetails';
+const RouteAdminModifyPriority = Admin + 'modifyPriority';
+const RouteAdminChangePassword = Admin + 'changePassword';
 
 module.exports = {
   User,
@@ -25,4 +27,6 @@ module.exports = {
   RouteUserProcess,
   RouteUserProcessStatus,
   RouteAdminGetDeptDetails,
+  RouteAdminModifyPriority,
+  RouteAdminChangePassword
 };

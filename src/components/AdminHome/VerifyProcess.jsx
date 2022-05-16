@@ -2,13 +2,16 @@ import axios from "axios";
 import { useEffect,useState} from "react";
 import { useParams } from "react-router-dom";
 import { LocalHost, RouteAdminUpdateProcess, RouteAdminVerifyProcess } from "../../services/Constants";
+import ModalComponent from "../ServicesComponent/ModalComponent";
 
 
 export default function VerifyProcess(){
+    
 
     const { id }= useParams();
     
   const [processData,setProcessData] = useState([]);
+  const [modalData,setModalData] =useState(null);
   let openedTime = Date.now();
     useEffect(()=>{
         console.log(id)
@@ -63,6 +66,7 @@ export default function VerifyProcess(){
 
     return(
         <div className="container-fluid">
+                <ModalComponent data={modalData} />
                <div className="container">
                  <button className="btn btn-danger" value={false} onClick={submit}>
                      Rejected
@@ -78,7 +82,7 @@ export default function VerifyProcess(){
                         <div className="col-md-3">
                                     <div className="row">
                             <div className="col-md-8 bg-light">{value[1]}</div>
-                           <button className="col-md-4 btn btn-info">view</button>
+                           <button className="col-md-4 btn btn-info" onClick={()=>setModalData(value[0])}>view</button>
                            </div>
 
                         </div>)}

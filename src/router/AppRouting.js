@@ -6,8 +6,11 @@ import DeptDetails from '../components/AdminHome/DeptDetails';
 import MaintainEmployee from '../components/AdminHome/MaintainEmployee';
 import VerifyProcess from '../components/AdminHome/VerifyProcess';
 import ViewProcess from '../components/AdminHome/ViewProcess';
+import ChangePassword from '../components/commonComponents/ChangePassword';
 import DocUploadComponent from '../components/DocUpload/DocUploadcomponent';
 import Logincomponent from '../components/Login/Logincomponent';
+import PDFDownloader from '../components/ProcessComponents/PDFDownloader';
+import PDFViewer from '../components/ProcessComponents/PDFViewer';
 import ViewProcessStatus from '../components/ProcessComponents/ViewProcessStatus';
 import ViewUserProcess from '../components/ProcessComponents/ViewUserProcess';
 import RegisterComponent from '../components/Register/RegisterComponent';
@@ -17,14 +20,16 @@ export default function AppRouting() {
     loggedIn: false,
     isAdmin: false,
     isOwner: false,
+    isLead: false,
   };
-
+  const [header, setHeader] = useState('');
   const [isRoute, setRoute] = useState(initialState);
   useEffect(() => {
     console.log('ddd');
     if (localStorage.getItem('loggedIn') != undefined) {
       console.log(JSON.parse(localStorage.getItem('loggedIn')));
       setRoute(JSON.parse(localStorage.getItem('loggedIn')));
+      setHeader(` ` + localStorage.getItem('header'));
     }
   }, []);
 
@@ -35,20 +40,21 @@ export default function AppRouting() {
   }
   function setLogin(route) {
     console.log({ route });
-    if (route.isOwner) {
-      window.location.href = 'http://localhost:3000/deptDetails';
-    } else if (route.isAdmin == true) {
-      window.location.href = 'http://localhost:3000/myProcess';
-    } else if (route.loggedIn) {
-      window.location.href = 'http://localhost:3000/userProcess    ';
-    }
+    // if (route.isOwner) {
+    //   window.location.href = 'http://localhost:3000/deptDetails';
+    // } else if (route.isAdmin == true) {
+    //   window.location.href = 'http://localhost:3000/myProcess';
+    // } else if (route.loggedIn) {
+    //   window.location.href = 'http://localhost:3000/userProcess    ';
+    // }
+    setHeader(localStorage.getItem('header'));
     setRoute(route);
   }
   return (
     <>
       <nav class='navbar navbar-expand-lg navbar-dark bg-info sticky-top'>
         <a class='navbar-brand' href='#'>
-          Navbar
+          {header}
         </a>
         <button
           class='navbar-toggler'
@@ -81,7 +87,7 @@ export default function AppRouting() {
             {isRoute.loggedIn && !isRoute.isAdmin && (
               <>
                 <li class='nav-item'>
-                  <a class='nav-link ' href='docUpload'>
+                  <a class='nav-link ' href='/'>
                     docUpload
                   </a>
                 </li>
@@ -100,17 +106,24 @@ export default function AppRouting() {
                   </a>
                 </li>
                 <li class='nav-item'>
-                  <a class='nav-link ' href='myProcess'>
+                  <a class='nav-link ' href='/'>
                     my process
                   </a>
-                </li>{' '}
+                </li>
+                {isRoute.isLead && (
+                  <li class='nav-item'>
+                    <a class='nav-link ' href='addEmployee'>
+                      addEmployee
+                    </a>
+                  </li>
+                )}
               </>
             )}
 
             {isRoute.loggedIn && isRoute.isOwner && (
               <>
                 <li class='nav-item'>
-                  <a class='nav-link ' href='deptDetails'>
+                  <a class='nav-link ' href='/'>
                     see departments
                   </a>
                 </li>
@@ -133,12 +146,20 @@ export default function AppRouting() {
 
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Logincomponent setLogin={setLogin} />} />
-          <Route path='/Register' element={<RegisterComponent />} />
+          <Route path='/changePassword' element={<ChangePassword />} />
+          {isRoute.loggedIn == false && (
+            <>
+              <Route
+                path='/'
+                element={<Logincomponent setLogin={setLogin} />}
+              />
+              <Route path='/Register' element={<RegisterComponent />} />
+            </>
+          )}
 
           {isRoute.loggedIn == true && !isRoute.isAdmin && (
             <>
-              <Route path='/docUpload' element={<DocUploadComponent />} />
+              <Route path='/' element={<DocUploadComponent />} />
               <Route path='/userProcess' element={<ViewUserProcess />} />
               <Route
                 path='/processStatus/:id'
@@ -152,15 +173,23 @@ export default function AppRouting() {
               <Route path='/dashboard' element={<DashBoardComponent />} />
               <Route path='/manageEmployee' element={<MaintainEmployee />} />
               <Route path='/addEmployee' element={<AddEmployee />} />
-              <Route path='/deptDetails' element={<DeptDetails />} />
+              <Route path='/' element={<DeptDetails />} />
             </>
           )}
           {isRoute.isAdmin == true && !isRoute.isOwner && (
             <>
-              <Route path='/myProcess' element={<ViewProcess />} />
+              <Route path='/' element={<ViewProcess />} />
               <Route path='/verifyProcess/:id' element={<VerifyProcess />} />
+              {isRoute.isLead && (
+                <Route
+                  path='/addEmployee'
+                  element={<AddEmployee dept={header} />}
+                />
+              )}
             </>
           )}
+          <Route path='pdf' element={<PDFDownloader />} />
+          {/* <Route path='pdf' element={<PDFViewer value={[1, 2, 3, 4, 5]} />} /> */}
 
           <Route
             path='*'
