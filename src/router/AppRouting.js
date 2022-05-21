@@ -6,6 +6,7 @@ import DeptDetails from '../components/AdminHome/DeptDetails';
 import MaintainEmployee from '../components/AdminHome/MaintainEmployee';
 import VerifyProcess from '../components/AdminHome/VerifyProcess';
 import ViewProcess from '../components/AdminHome/ViewProcess';
+import ViewProcessed from '../components/AdminHome/ViewProcessed';
 import ChangePassword from '../components/commonComponents/ChangePassword';
 import DocUploadComponent from '../components/DocUpload/DocUploadcomponent';
 import Logincomponent from '../components/Login/Logincomponent';
@@ -111,11 +112,18 @@ export default function AppRouting() {
                   </a>
                 </li>
                 {isRoute.isLead && (
-                  <li class='nav-item'>
-                    <a class='nav-link ' href='addEmployee'>
-                      addEmployee
-                    </a>
-                  </li>
+                  <>
+                    <li class='nav-item'>
+                      <a class='nav-link ' href='addEmployee'>
+                        addEmployee
+                      </a>
+                    </li>
+                    <li class='nav-item'>
+                      <a class='nav-link ' href='getProcessed'>
+                        getProcessed
+                      </a>
+                    </li>
+                  </>
                 )}
               </>
             )}
@@ -181,10 +189,13 @@ export default function AppRouting() {
               <Route path='/' element={<ViewProcess />} />
               <Route path='/verifyProcess/:id' element={<VerifyProcess />} />
               {isRoute.isLead && (
-                <Route
-                  path='/addEmployee'
-                  element={<AddEmployee dept={header} />}
-                />
+                <>
+                  <Route
+                    path='/addEmployee'
+                    element={<AddEmployee dept={header} />}
+                  />
+                  <Route path='/getProcessed' element={<ViewProcessed />} />
+                </>
               )}
             </>
           )}

@@ -6,7 +6,8 @@ import { LocalHost, RouteAddDocuments, RouteAdminMyProcess } from "../../service
 
 export default function ViewProcess(){
     const [process,setProcess] = useState([]);
-    const navigate = useNavigate()
+    const [myPriority, setPriority] = useState(0);
+    const navigate = useNavigate();
    useEffect(()=>{
        getAllProcess();
    },[])
@@ -15,11 +16,12 @@ export default function ViewProcess(){
        console.log("dd")
        axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
        let data = await axios.get(RouteAdminMyProcess);
-       console.log({data})
+       console.log({data:data.data})
        if(data.data!=''){
            setProcess(data.data.method);
+           setPriority(data.data.myPriority);
        }
-       console.log({data});
+   
        alert("data fetched");
    }
 
@@ -41,7 +43,7 @@ export default function ViewProcess(){
                         <i>{value[0]}</i>
                         </div>
                       <div><b>About process</b><br/><i>{value[1]}</i> </div>
-                       <a href={"/verifyProcess/"+value[0]}>Click to View the process</a>
+                       {value[3]== myPriority ? <a className="btn btn-info" href={"/verifyProcess/"+value[0]}>Click to View the process</a>: <p className="text-danger">Currently no access</p>}
                        </div>
                    </div>)}
             </div>
