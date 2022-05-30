@@ -12,6 +12,7 @@ export default function VerifyProcess(){
     
   const [processData,setProcessData] = useState([]);
   const [modalData,setModalData] =useState(null);
+  const [loading,setLoading] = useState(false);
   let openedTime = Date.now();
     useEffect(()=>{
         console.log(id)
@@ -19,13 +20,14 @@ export default function VerifyProcess(){
               
     },[]);
     async function submit(e){
+        setLoading(true);
         console.log(e.target.value)
         let status ={
             openedTime,
             closedTime:Date.now(),
             approvalDept:'',
             approvedStatus:e.target.value,
-            description:"not applicatble",
+            description:"not applicable",
             
         }
         console.log({status})
@@ -39,7 +41,10 @@ export default function VerifyProcess(){
         }
           axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
         let datas = await axios.post(RouteAdminUpdateProcess,data);
+        alert("RESPONSE SAVED SUCCESSFULLY");
+        window.location.href ="http://localhost:3000/"
         console.log({datas})
+        setLoading(false);
     }
 
     async function getDocument(id){
@@ -53,21 +58,44 @@ export default function VerifyProcess(){
        if(data.data!='No access'){
            console.log(data);
            setProcessData(data.data.src);
+        
         //    setProcess(data);
        }
+       else{
+           alert("unauthorized access")
+       }
  
+    }
+    function setData(value){
+        setModalData(value);
+        setTimeout(()=>{
+            setModalData(null);
+        },3000)
     }
     if(processData.length==0){
         return(
             <>
-            Currently no access or Access Restricted</>
+            no documents to be shown
+          </>
         )
+    }
+
+    if(loading){
+           return(
+      <div className='container-fluid' style={{width:'100%',height:'100%',marginTop:'20%',marginLeft:'45%'}}>
+
+     
+    <div class="spinner-border text-primary" role="status">
+  <span class="sr-only">Adding new process</span>
+</div>
+ </div>
+    )
     }
 
     return(
         <div className="container-fluid">
                 <ModalComponent data={modalData} />
-               <div className="container">
+               <div className="container" style={{display:"flex",flexDirection:"row",justifyContent:"space-around",margin:10}}>
                  <button className="btn btn-danger" value={false} onClick={submit}>
                      Rejected
                  </button>
@@ -82,7 +110,7 @@ export default function VerifyProcess(){
                         <div className="col-md-3">
                                     <div className="row">
                             <div className="col-md-8 bg-light">{value[1]}</div>
-                           <button className="col-md-4 btn btn-info" onClick={()=>setModalData(value[0])}>view</button>
+                           <button className="col-md-4 btn btn-info" onClick={()=>setData(value[0])}>view</button>
                            </div>
 
                         </div>)}

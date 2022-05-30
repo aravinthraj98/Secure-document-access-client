@@ -44,6 +44,8 @@ export default function AddEmployee({dept}){
    async function handleSubmit(){
     // let password = (Math.random() + 1).toString(36).substring(7)+(Math.random()+1).toString(36).substring(7);
     let password ="qwerty";
+    console.log({userDetail});
+  
     let isLead =true;
     if(dept!=null) isLead = false;
     console.log({password})
@@ -53,7 +55,7 @@ export default function AddEmployee({dept}){
         if(response.data.isValid==true){
           alert(response.data.userId);
           localStorage.setItem("token",response.data.token)
-           setUserDetail({...initialState});
+           setUserDetail({...initialState,deptName:department[0]});
         }
         else{
           alert("some error occured please try again later")

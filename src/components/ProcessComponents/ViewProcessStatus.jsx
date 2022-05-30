@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RouteUserProcess, RouteUserProcessStatus } from "../../services/Constants";
 import ModalComponent from "../ServicesComponent/ModalComponent";
+import PDFDownloader from "./PDFDownloader";
 
 import PDFViewer from "./PDFViewer";
 
@@ -16,6 +17,7 @@ export default function ViewProcessStatus(){
   const[pdf,setPdf] = useState(false);
   const[status,setStatus] = useState([])
   const [modalData,setModalData] = useState(null);
+  const [approvalDept,setApprovalDept] =  useState([]);
     useEffect(()=>{
         console.log(id)
               getDocument(id);
@@ -54,6 +56,7 @@ export default function ViewProcessStatus(){
            console.log({data});
            setProcessData(data.data.src);
            setStatus(data.data.status)
+           setApprovalDept(data.data.approvalDept)
           //    setProcess(data);
        }
  
@@ -82,14 +85,28 @@ export default function ViewProcessStatus(){
 
                         </div>)}
                 </div>
+                <table className="table m-5 mr-5 w-75">
+                 
+                       <tr>
+                           <td>Department</td>
+                       <td>department priority</td>
+                       </tr>
+                      
+
+           
+                   {approvalDept.map((value,index)=> value[1]!=0?<tr>
+                       <td>{value[0]}</td>
+                       <td>{value[1]}</td>
+                   </tr>:<></>)}
+                </table>
                 </div> 
              <div className="container-fluid">
                  <h1>Status</h1>
                    <div className="row">
                 {status.map((value,index)=> <div className="col-md-3">
                             <div className="row">
-                            <div className="col-md-8 bg-light">Dept:{value[0]} status</div>
-                            <PDFViewer value={value} />
+                            <div className="col-md-8 bg-light">Dept:{value[0]}</div>
+                            <PDFDownloader value={value} />
 
                            </div>
                 </div>)}

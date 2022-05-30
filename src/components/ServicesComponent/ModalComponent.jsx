@@ -13,9 +13,8 @@ useEffect(()=>{
       
            document.getElementById("myModel").click();
       }
-      return()=>{
-        setDataURL("")
-      }
+      return()=>
+        setDataURL("");
 },[data])
 
 

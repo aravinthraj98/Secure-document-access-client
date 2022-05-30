@@ -14,7 +14,7 @@ const RouteAdminGetDeptDetails = Admin + 'getDepartmentDetails';
 const RouteAdminModifyPriority = Admin + 'modifyPriority';
 const RouteAdminChangePassword = Admin + 'changePassword';
 const RouteAdminGetProcessed = Admin + 'getProcessed';
-
+const RouteAdminAddDepartment = Admin + 'addDepartment';
 
 module.exports = {
   User,
@@ -31,5 +31,6 @@ module.exports = {
   RouteAdminGetDeptDetails,
   RouteAdminModifyPriority,
   RouteAdminChangePassword,
-  RouteAdminGetProcessed
+  RouteAdminGetProcessed,
+  RouteAdminAddDepartment
 };

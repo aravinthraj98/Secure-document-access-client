@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import bg1 from "../../assests/bg1.jpg"
 
 
 export default function RegisterComponent(){
@@ -27,6 +28,7 @@ export default function RegisterComponent(){
           localStorage.setItem('loggedIn',JSON.stringify({loggedIn:true,isAdmin:false,isOwner:false}))
           localStorage.setItem('header',response.data.userId);
            setUserDetail({...initialState});
+           window.location.href = 'http://localhost:3000/'
         }
         else{
           alert("some error occured please try again later")
@@ -36,10 +38,14 @@ export default function RegisterComponent(){
    
 
 return (
+
   <div className='App App-header'>
-    <div className='container ' style={{ width: '50%' }}>
-      <h1 className='text-secondary'>Register</h1>
-    =
+    <div className='container-fluid ' style={{ width: '100%',height:"100vh" }}>
+      <div className="row" style={{height:"100%"}}>
+        <div className="col-md-6 " style={{marginTop:"10%   "}}>
+            
+                   <h1 className='text-secondary'>Register</h1>
+    
         <input
         type='email'
         placeholder='emailId'
@@ -71,6 +77,12 @@ return (
         onClick={handleSubmit}
       
       />
+        </div>
+    
+      
+                    <div className="col-md-6" style={{background: `black url(${bg1}) no-repeat `}}></div>
+      </div>
+      
     </div>
   </div>
 );

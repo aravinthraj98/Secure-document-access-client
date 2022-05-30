@@ -2,12 +2,12 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import PDFViewer from "./PDFViewer";
 
 
-export default function PDFDownloader(){
+export default function PDFDownloader({value,fullAddress}){
 
     return(
         <PDFDownloadLink
-          document={<PDFViewer value={[1,2,3,4,5,6]} />}
-          fileName="movielist.pdf"
+          document={<PDFViewer value={value} fullAddress={fullAddress} />}
+          fileName={value[0]+ "certificate.pdf"}
           style={{
             textDecoration: "none",
             padding: "10px",
@@ -17,7 +17,7 @@ export default function PDFDownloader(){
           }}
         >
           {({ blob, url, loading, error }) =>
-            loading ? "Loading document..." : "Download Pdf"
+            loading ? "Loading document..." : `${value[0]} Download Pdf`
           }
         </PDFDownloadLink>
     )

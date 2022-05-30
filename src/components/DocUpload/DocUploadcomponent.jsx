@@ -16,13 +16,18 @@ function DocUploadComponent() {
    
   
   };
+  let initialLoader = {
+    upload:false,
+    submit:false
+  }
   const [selectedDepartment,setSelectedDepartment] = useState([])
 
   
   const [file, setFile] = useState(initialState);
   const [files, setFiles] = useState([]);
   const [departments,setDepartments]= useState([]);
-  const [modalData,setModalData] = useState(null)
+  const [modalData,setModalData] = useState(null);
+  const[loading,setLoading] = useState(initialLoader);
 
   useEffect(()=>{
           loadDepartments();
@@ -50,6 +55,7 @@ function DocUploadComponent() {
     };
   };
   const addDocuments = (e) => {
+    setLoading({...loading,upload:true});
     e.preventDefault();
     console.log({ file });
     ipfs.files.add(file.fileBuffer, (err, result) => {
@@ -68,8 +74,10 @@ function DocUploadComponent() {
         document.getElementById('file').value = '';
       }
     });
+    setLoading(initialLoader);
   };
   const handleCheck =(e)=>{
+ 
     console.log(e.target.checked);
     let all =[...selectedDepartment];
     if(e.target.checked==false){
@@ -80,9 +88,11 @@ function DocUploadComponent() {
      else{
        setSelectedDepartment([...selectedDepartment,e.target.value])
      }
+ 
     
   }
   const submit =async()=>{
+       setLoading({...loading,submit:true});
     let data ={
       docSrc:[...files],
       description:file.description,
@@ -99,9 +109,24 @@ function DocUploadComponent() {
     if(response.data == true || response.data == 'true'){
       alert("process added successfully");
       setFiles([]);
+      setSelectedDepartment([]);
       
     }
     console.log({response});
+        setLoading(initialLoader)
+
+  }
+
+  if(loading.submit==true){
+    return(
+      <div className='container-fluid' style={{width:'100%',height:'100%',marginTop:'20%',marginLeft:'45%'}}>
+
+     
+    <div class="spinner-border text-primary" role="status">
+  <span class="sr-only">Adding new process</span>
+</div>
+ </div>
+    )
 
   }
  
@@ -149,7 +174,10 @@ function DocUploadComponent() {
             onClick={addDocuments}
           /></div>
           <div className="col-md-8">
-                <h3 className='btn text-info'>My documents</h3>
+                <h3 className='btn text-info'>My documents
+                {loading.upload==true && <div className="spinner-border text-primary" role="status">
+  <span className="sr-only">uploading</span>
+</div>}</h3>
               <div className="row">
                     {files.map((value, index) => (
               <div className='col-md-2 bg-light ' style={{backgroundColor:"white",border:"1px solid",borderColor:"whitesmoke"}}>

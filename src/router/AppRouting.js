@@ -102,11 +102,6 @@ export default function AppRouting() {
             {isRoute.loggedIn && isRoute.isAdmin && !isRoute.isOwner && (
               <>
                 <li class='nav-item'>
-                  <a class='nav-link' href='verifyDocuments'>
-                    verifyDocuments
-                  </a>
-                </li>
-                <li class='nav-item'>
                   <a class='nav-link ' href='/'>
                     my process
                   </a>
@@ -115,12 +110,12 @@ export default function AppRouting() {
                   <>
                     <li class='nav-item'>
                       <a class='nav-link ' href='addEmployee'>
-                        addEmployee
+                        Add employee
                       </a>
                     </li>
                     <li class='nav-item'>
                       <a class='nav-link ' href='getProcessed'>
-                        getProcessed
+                        Get processed
                       </a>
                     </li>
                   </>
@@ -132,22 +127,24 @@ export default function AppRouting() {
               <>
                 <li class='nav-item'>
                   <a class='nav-link ' href='/'>
-                    see departments
+                    See Departments
                   </a>
                 </li>
 
                 <li class='nav-item'>
                   <a class='nav-link ' href='addEmployee'>
-                    addEmployee
+                    Add employee
                   </a>
                 </li>
               </>
             )}
-            <li class='nav-item'>
-              <button className='btn btn-danger' onClick={logout}>
-                logout
-              </button>
-            </li>
+            {isRoute.loggedIn && (
+              <li class='nav-item'>
+                <button className='btn btn-danger' onClick={logout}>
+                  Logout
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </nav>
@@ -202,10 +199,7 @@ export default function AppRouting() {
           <Route path='pdf' element={<PDFDownloader />} />
           {/* <Route path='pdf' element={<PDFViewer value={[1, 2, 3, 4, 5]} />} /> */}
 
-          <Route
-            path='*'
-            element={<h1 className='m-25'> 404-page not found</h1>}
-          />
+          <Route path='*' element={<h5>Loading...</h5>} />
         </Routes>
       </BrowserRouter>
     </>
