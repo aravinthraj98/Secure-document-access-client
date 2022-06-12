@@ -13,6 +13,8 @@ export default function VerifyProcess(){
   const [processData,setProcessData] = useState([]);
   const [modalData,setModalData] =useState(null);
   const [loading,setLoading] = useState(false);
+  const [description,setDescription] = useState('N/A')
+  const [status,setStatus] = useState([]);
   let openedTime = Date.now();
     useEffect(()=>{
         console.log(id)
@@ -21,24 +23,25 @@ export default function VerifyProcess(){
     },[]);
     async function submit(e){
         setLoading(true);
-        console.log(e.target.value)
+        console.log({value:e.target.value})
         let status ={
             openedTime,
             closedTime:Date.now(),
             approvalDept:'',
             approvedStatus:e.target.value,
-            description:"not applicable",
+            description:description,
             
         }
         console.log({status})
         
         let data ={
-            status,
+            status:{...status},
             currentPriority:1,
             processId:id
 
 
         }
+        console.log({data})
           axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
         let datas = await axios.post(RouteAdminUpdateProcess,data);
         alert("RESPONSE SAVED SUCCESSFULLY");
@@ -58,6 +61,7 @@ export default function VerifyProcess(){
        if(data.data!='No access'){
            console.log(data);
            setProcessData(data.data.src);
+           setStatus(data.data.status)
         
         //    setProcess(data);
        }
@@ -91,12 +95,17 @@ export default function VerifyProcess(){
  </div>
     )
     }
+      function getDate(sec){
+    let time = new Date(Number(sec));
+    return time.toLocaleString()
+  }
 
     return(
         <div className="container-fluid">
                 <ModalComponent data={modalData} />
                <div className="container" style={{display:"flex",flexDirection:"row",justifyContent:"space-around",margin:10}}>
-                 <button className="btn btn-danger" value={false} onClick={submit}>
+                <textarea className="form-control mr-2" value={description} onChange={e=>setDescription(e.target.value)}/>
+                 <button className="btn btn-danger mr-2" value={false} onClick={submit}>
                      Rejected
                  </button>
                       <button className="btn btn-success" value={true} onClick={submit}>
@@ -114,7 +123,21 @@ export default function VerifyProcess(){
                            </div>
 
                         </div>)}
+
                 </div>
+                {status.length>0 && <table className="table mt-4">
+                 <tr>
+                    <th>dept</th>
+                    <th>status</th>
+                    <th>time</th>
+                 </tr>
+                 {status.map((value)=><tr>
+                    <td>{value[0]}</td>
+                    <td>{value[3]?"Approved":"Rejected"}</td>
+                    <td>{getDate(value[2])}</td>
+                    <td></td>
+                 </tr>)}
+                </table>}
                 </div> 
           
         </div>

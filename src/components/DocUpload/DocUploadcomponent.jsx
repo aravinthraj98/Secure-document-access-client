@@ -135,8 +135,9 @@ function DocUploadComponent() {
   return (
     <>
           <ModalComponent data={modalData} />
-      <div className=' container-fluid w-100'>
-        <form id={"formDoc"}
+      <div className=' container-fluid w-100 bgcolor' style={{height:"100vh"}}>
+        <div>-</div>
+        <form className='small-container' id={"formDoc"}
           onSubmit={(e) => {
             e.preventDefault();
           }}
@@ -200,9 +201,9 @@ function DocUploadComponent() {
           <div className="col-md-6">
             Full Address:<br /><textarea onChange={(e)=>setFile({...file,fullAddress:e.target.value})} rows={3} className="form-control" />
           </div>
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
             Enter description about your request:<textarea onChange={(e)=>setFile({...file,description:e.target.value})} rows={3} className="form-control" />
-          </div>
+          </div> */}
         </div>
           <input
             type='reset'

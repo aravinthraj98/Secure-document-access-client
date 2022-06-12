@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+.btn-info{
+  background-color: #563d7c !important;
+}
+.bg-info{
+    background-color: #563d7c !important;
+}
+
+
+input{
+  padding: 1em;
+  margin:1em;
+}
+
+
+

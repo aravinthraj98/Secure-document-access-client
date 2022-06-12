@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RouteUserProcess, RouteUserProcessStatus } from "../../services/Constants";
+import UpdateDocUpload from "../DocUpload/UpdateDocUpload";
+import DocUploadComponent from "../DocUpload/UpdateDocUpload";
 import ModalComponent from "../ServicesComponent/ModalComponent";
 import PDFDownloader from "./PDFDownloader";
 
@@ -12,17 +14,23 @@ import PDFViewer from "./PDFViewer";
 export default function ViewProcessStatus(){
     const { id }= useParams();
     
-    
+  const [data,setAllData] = useState(null);
   const [processData,setProcessData] = useState([]);
   const[pdf,setPdf] = useState(false);
   const[status,setStatus] = useState([])
   const [modalData,setModalData] = useState(null);
   const [approvalDept,setApprovalDept] =  useState([]);
+  const [currentStatus,setCurrentStatus] = useState(false);
+  const [update,setUpdate] = useState(false);
     useEffect(()=>{
         console.log(id)
               getDocument(id);
               
     },[]);
+
+    function updateProcess(){
+         setUpdate(true);
+    }
     // async function submit(){
     //     let status ={
     //         openedTime:"2",
@@ -55,8 +63,12 @@ export default function ViewProcessStatus(){
        if(data.data!='No access'){
            console.log({data});
            setProcessData(data.data.src);
-           setStatus(data.data.status)
-           setApprovalDept(data.data.approvalDept)
+           setStatus(data.data.status);
+           if(data.data.currentStatus == 'Rejected'){
+            setCurrentStatus(true);
+           }
+           setApprovalDept(data.data.approvalDept);
+           setAllData(data);
           //    setProcess(data);
        }
  
@@ -68,7 +80,9 @@ export default function ViewProcessStatus(){
     }
    
       
-    
+    if(update){
+        return(<UpdateDocUpload data={data} id={id} setUpdate={setUpdate} />)
+    }
 
     return(
         <div className="container-fluid">
@@ -85,6 +99,7 @@ export default function ViewProcessStatus(){
 
                         </div>)}
                 </div>
+                
                 <table className="table m-5 mr-5 w-75">
                  
                        <tr>
@@ -110,7 +125,10 @@ export default function ViewProcessStatus(){
 
                            </div>
                 </div>)}
+                 
                 </div>
+                 {currentStatus==true&& <div className="text-danger">One of the department is rejected your process<br /><button className="btn btn-danger m-1" onClick={updateProcess} >Pleade Update</button></div>}        
+              
                
              </div>
         </div>
